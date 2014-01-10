@@ -47,7 +47,23 @@
 	   <groupId>org.apache.commons</groupId>
 	   <artifactId>commons-lang3</artifactId>
 	   <version>${version.commons.lang}</version>
-	</dependency>
+	  </dependency>
+    <dependency>
+      <groupId>com.github.akiellor.jasmine</groupId>
+      <artifactId>jasmine-cli</artifactId>
+      <version>0.0.12-SNAPSHOT</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.dynjs</groupId>
+          <artifactId>dynjs</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.projectodd.rephract</groupId>
+          <artifactId>rephract</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
 
   <build>
@@ -154,6 +170,9 @@
           <includes>
             <include>**unit/*Test*.java</include>
           </includes>
+          <systemPropertyVariables>
+            <dynjs.compile.mode>off</dynjs.compile.mode>
+          </systemPropertyVariables>
         </configuration>
       </plugin>
       <plugin>
@@ -162,10 +181,9 @@
         <version>${maven.failsafe.plugin.version}</version>
         <configuration>
           <systemPropertyVariables>
-            <property>
-              <vertx.mods>target/mods</vertx.mods>
-              <vertx.test.timeout>15</vertx.test.timeout>
-            </property>
+            <vertx.mods>target/mods</vertx.mods>
+            <vertx.test.timeout>15</vertx.test.timeout>
+            <dynjs.compile.mode>off</dynjs.compile.mode>
           </systemPropertyVariables>
           <includes>
             <include>**/integration/**</include>
@@ -178,6 +196,28 @@
               <goal>integration-test</goal>
               <goal>verify</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.2.1</version>
+        <executions>
+          <execution>
+            <id>Jasmine Integration Tests</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <mainClass>org.jasmine.cli.Main</mainClass>
+              <classpathScope>test</classpathScope>
+              <arguments>
+                <argument>--pattern</argument>
+                <argument>**/*Spec.js</argument>
+              </arguments>
+            </configuration>
           </execution>
         </executions>
       </plugin>

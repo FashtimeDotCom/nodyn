@@ -13,41 +13,6 @@ vertxStop = function() {
 };
 
 var FsTests = {
-  testRename: function() {
-    fs.rename(tmpFile.getAbsolutePath(), basedir + "/granola.txt", function(e) {
-      vassert.assertTrue(e === null);
-      vassert.assertTrue(newFile.exists());
-      vassert.testComplete();
-    });
-  },
-
-  testRenameSync: function() {
-    fs.renameSync(tmpFile.getAbsolutePath(), basedir + "/granola.txt");
-    vassert.assertTrue(newFile.exists());
-    vassert.testComplete();
-  },
-
-  testRenameNonExistentFile: function() {
-    fs.rename("blarg", basedir + "/granola.txt", function(e) {
-      vassert.assertFalse(newFile.exists());
-      if (e === null) {
-        vassert.fail("Rename should deliver an exception with a non-existent file");
-      }
-    });
-    vassert.testComplete();
-  },
-
-  testWriteFile: function() {
-    fs.writeFile(tmpFile.getAbsolutePath(),
-      'Now is the winter of our discontent made glorious summer by this son of York',
-      function (err) {
-        if (err) throw err;
-        fs.exists(tmpFile.getAbsolutePath(), function(exists) {
-          vassert.assertEquals(true, exists);
-          vassert.testComplete();
-        });
-      });
-  },
 
   testExists: function() {
     fs.exists(tmpFile.getAbsolutePath(), function(result) {
